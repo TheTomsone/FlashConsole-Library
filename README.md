@@ -1,4 +1,4 @@
-# FlashConsole Library
+# FlashConsole Library (version 0.1)
 
 FlashConsole is a C++ library, currently in developpement, who can help you building a pretty user interface in console with ASCII character, you can create any type of interface (windows, menus, grids, lists, titles,...). You can place them in any postision using Horizontal alignement (left, center, right) and Vertical alignement (top, center, bottom)
 
