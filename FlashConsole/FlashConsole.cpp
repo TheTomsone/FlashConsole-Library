@@ -45,6 +45,7 @@ void clearConsole() {
 int main()
 {
     std::shared_ptr<Vector2> window_size{new Vector2{ 50,20 }};
+    getConsoleSize(*window_size);
 
     std::cout << "X: " << window_size->getX() << " | Y: " << window_size->getY() << std::endl;
 
