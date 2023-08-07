@@ -57,7 +57,8 @@ int main()
     std::cout << "Content   : X: " << test.getVectors(CONTENT_SIZE)->getX() << " | Y: " << test.getVectors(CONTENT_SIZE)->getY() << std::endl;
     std::cout << "Position  : X: " << test.getVectors(POSITION)->getX() << " | Y: " << test.getVectors(POSITION)->getY() << std::endl;
 
-    test.lineConstructor(10, '-', '|', '|', '*', "FLASH CONSOLE", CENTER_H);
+    test.createAlteredLine(10, '-', '*', '>', '<');
+    test.createText("R", CENTER_H);
 
     std::cout << "BASE INTERFACE :\n";
     std::cout << "Container : X: " << test.getVectors(CONTAINER_SIZE)->getX() << " | Y: " << test.getVectors(CONTAINER_SIZE)->getY() << std::endl;

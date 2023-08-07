@@ -9,12 +9,12 @@ BaseInterface::BaseInterface(std::shared_ptr<Vector2> container_size, Horizontal
 	vectors.emplace(CONTAINER_SIZE, container_size);
 	vectors.emplace(CONTENT_SIZE, new Vector2{});
 	vectors.emplace(POSITION, new Vector2{ calculatePosition(horizontal, vectors[CONTAINER_SIZE]->getX(), vectors[CONTENT_SIZE]->getX()),
-											calculatePosition(vertical, vectors[CONTAINER_SIZE]->getY(), vectors[CONTENT_SIZE]->getY()) });
+										   calculatePosition(vertical, vectors[CONTAINER_SIZE]->getY(), vectors[CONTENT_SIZE]->getY()) });
 	vectors[POSITION]->setOffset(offset_x, offset_y);
 	for (size_t increment_y{ 0 }; increment_y < vectors[CONTAINER_SIZE]->getY(); increment_y++)
 	{
 		std::string line{};
-		line.append(vectors[CONTAINER_SIZE]->getX(), CHAR_SPACE);
+		line.append(vectors[CONTAINER_SIZE]->getX(), '-');
 		content.push_back(line);
 	}
 }
@@ -55,12 +55,32 @@ void BaseInterface::updateVectors(const std::ostringstream& sstream)
 /* Add String Stream in the Content vector */
 void BaseInterface::addToInterface(const std::ostringstream& sstream)
 {
-	content.at(vectors[POSITION]->getY()).replace(vectors[POSITION]->getX(), vectors[CONTENT_SIZE]->getX(), sstream.str());
-}
+	size_t count{ 0 };
+	size_t deleted_count{ 0 };
+	std::string& row{ content.at(vectors[POSITION]->getY()) };
 
-// PUBLIC METHODS
+	//content.at(vectors[POSITION]->getY()).replace(vectors[POSITION]->getX(), vectors[CONTENT_SIZE]->getX(), sstream.str());
+	//row.replace(vectors[POSITION]->getX(), vectors[CONTENT_SIZE]->getX(), sstream.str());
+
+	for (char& chr : row)
+	{
+		if (count >= vectors[CONTAINER_SIZE]->getX())
+			break;
+		if (deleted_count >= sstream.str().size())
+			break;
+		if (chr == '-')
+		{
+			row.erase(count, 1);
+			deleted_count++;
+			continue;
+		}
+			
+		count++;
+	}
+	row.insert(vectors[POSITION]->getX(), sstream.str());
+}
 /* Generate a new line in the interface*/
-void BaseInterface::lineConstructor(size_t half_count_repeat, const char repeated_char, const char start_char, const char end_char, const char alter_char, const std::string& additional_string, HorizontalAlignement string_position)
+void BaseInterface::lineConstructor(size_t count_repeat, const char repeated_char, const char start_char, const char end_char, const char alter_char, const std::string& additional_string, HorizontalAlignement string_position)
 {
 	std::ostringstream overlay;
 
@@ -69,18 +89,21 @@ void BaseInterface::lineConstructor(size_t half_count_repeat, const char repeate
 	const char* repeated = (repeated_char == CHAR_NULL ? nullptr : &repeated_char);
 	const char* alter = (alter_char == CHAR_NULL ? nullptr : &alter_char);
 
+	count_repeat /= 2;
+
+
 	if (start)
 		overlay << *start;
 
 	if (string_position == LEFT)
 		overlay << additional_string;
 
-	repeatChar(overlay, half_count_repeat, repeated, alter);
+	repeatChar(overlay, count_repeat, repeated, alter);
 
 	if (string_position == CENTER_H)
 		overlay << additional_string;
 
-	repeatChar(overlay, half_count_repeat, repeated, alter);
+	repeatChar(overlay, count_repeat, repeated, alter);
 
 	if (string_position == RIGHT)
 		overlay << additional_string;
@@ -91,6 +114,22 @@ void BaseInterface::lineConstructor(size_t half_count_repeat, const char repeate
 	updateVectors(overlay);
 	addToInterface(overlay);
 }
+/* Create a simple line */
+void BaseInterface::createSimpleLine(size_t count_repeat, const char repeated_char, const char start, const char end)
+{
+	lineConstructor(count_repeat, repeated_char, start, end);
+}
+/* Create an altered line */
+void BaseInterface::createAlteredLine(size_t count_repeat, const char repeated_char, const char alter_char, const char start, const char end)
+{
+	lineConstructor(count_repeat, repeated_char, start, end, alter_char);
+}
+/* Create a text */
+void BaseInterface::createText(const std::string& additional_string, HorizontalAlignement string_position)
+{
+	lineConstructor(0, CHAR_NULL, CHAR_NULL, CHAR_NULL, CHAR_NULL, additional_string, string_position);
+}
+// PUBLIC METHODS
 /* Display the interface */
 void BaseInterface::displayInterface() const
 {

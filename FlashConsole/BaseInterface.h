@@ -27,6 +27,7 @@ protected:
     void repeatChar(std::ostringstream& sstream, size_t count_repeat, const char* repeated, const char* alter);
     void addToInterface(const std::ostringstream& sstream);
     void updateVectors(const std::ostringstream& sstream);
+    void lineConstructor(size_t count_repeat = 0, const char repeated_char = CHAR_NULL, const char start = CHAR_NULL, const char end = CHAR_NULL, const char alter_char = CHAR_NULL, const std::string& additional_string = "", HorizontalAlignement string_position = LEFT);
 
 public:
     std::shared_ptr<Vector2> getVectors(VectorType vec);
@@ -34,7 +35,9 @@ public:
     BaseInterface(std::shared_ptr<Vector2> container_size = nullptr, HorizontalAlignement horizontal = LEFT, VerticalAlignement vertical = TOP, size_t offset_x = 0, size_t offset_y = 0);
     ~BaseInterface();
 
-    void lineConstructor(size_t count_repeat = 0, const char repeated_char = CHAR_NULL, const char start = CHAR_NULL, const char end = CHAR_NULL, const char alter_char = CHAR_NULL, const std::string& additional_string = "", HorizontalAlignement string_position = LEFT);
+    void createSimpleLine(size_t count_repeat = 0, const char repeated_char = CHAR_NULL, const char start = CHAR_NULL, const char end = CHAR_NULL);
+    void createAlteredLine(size_t count_repeat = 0, const char repeated_char = CHAR_NULL, const char alter_char = CHAR_NULL, const char start = CHAR_NULL, const char end = CHAR_NULL);
+    void createText(const std::string& additional_string = "", HorizontalAlignement string_position = LEFT);
     void displayInterface() const;
 };
 
